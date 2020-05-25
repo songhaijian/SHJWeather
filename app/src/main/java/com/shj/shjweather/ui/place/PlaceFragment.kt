@@ -1,5 +1,6 @@
 package com.shj.shjweather.ui.place
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.shj.shjweather.R
+import com.shj.shjweather.ui.weather.WeatherActivity
 import kotlinx.android.synthetic.main.fragment_place.*
 
 class PlaceFragment : Fragment() {
@@ -67,5 +69,15 @@ class PlaceFragment : Fragment() {
                 it.exceptionOrNull()?.printStackTrace()
             }
         })
+        if (viewModel.isPlaceSaved()) {
+            val place = viewModel.getSavedPlace()
+            val weatherIntent = Intent(context, WeatherActivity::class.java).apply {
+                putExtra("location_lng", place.location.lng)
+                putExtra("location_lat", place.location.lat)
+                putExtra("place_name", place.name)
+            }
+            startActivity(weatherIntent)
+            activity?.finish()
+        }
     }
 }

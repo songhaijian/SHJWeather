@@ -8,9 +8,20 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 object ShjNetWork {
+    //获取城市列表
     private val placeService = ServiceCreator.create(PlaceService::class.java)
+
     suspend fun searchPlaces(query: String) =
         placeService.searchPlaces(query).await()
+
+    private val weatherService = ServiceCreator.create(WeatherService::class.java)
+    //天级预报接口
+    suspend fun getRealtimeWeather(lng: String, lat: String) =
+        weatherService.getRealtimeWeather(lng, lat).await()
+
+    //实况天气接口
+    suspend fun getDailyWeather(lng: String, lat: String) =
+        weatherService.getDailyWeather(lng, lat).await()
 
     private suspend fun <T> Call<T>.await(): T {
         return suspendCoroutine { continuation ->
